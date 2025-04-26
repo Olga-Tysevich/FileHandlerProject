@@ -6,11 +6,13 @@ import by.filehandler.reader.FileDataReaderFactory;
 import by.filehandler.reader.FileType;
 import by.filehandler.utils.MapUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 public class DefaultFileHandler implements FileHandler {
     private final FileDataReaderFactory fileDataReaderFactory = new FileDataReaderFactory();
@@ -22,6 +24,7 @@ public class DefaultFileHandler implements FileHandler {
             List<Map<String, String>> data = dataReader.readData(bytes);
             return extractFieldValues(data, fieldName);
         } catch (IOException e) {
+            log.error("Error extracting data by field name: {}", fieldName, e);
             throw new RuntimeException(e);
         }
     }
@@ -33,6 +36,7 @@ public class DefaultFileHandler implements FileHandler {
             List<Map<String, String>> data = dataReader.readData(bytes);
             return filterAndSelectFields(data, filter);
         } catch (IOException e) {
+            log.error("Error extracting data by field values", e);
             throw new RuntimeException(e);
         }
     }
@@ -44,6 +48,7 @@ public class DefaultFileHandler implements FileHandler {
             List<Map<String, String>> data = dataReader.readData(bytes);
             return groupDataByFilterRules(data, filter);
         } catch (IOException e) {
+            log.error("Error getting data arrays by columns", e);
             throw new RuntimeException(e);
         }
     }

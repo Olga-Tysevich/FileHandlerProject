@@ -16,6 +16,7 @@
     <lombok.version>1.18.36</lombok.version>
     <poi-ooxml.version>5.2.3</poi-ooxml.version>
     <mockito-core.version>5.8.0</mockito-core.version>
+    <slf4j-api.version>2.0.12</slf4j-api.version>
   </properties>
 
   <dependencies>
@@ -45,6 +46,11 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j-api.version}</version>
+    </dependency>
 
   </dependencies>
   <build>
