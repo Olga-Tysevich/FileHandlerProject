@@ -86,7 +86,7 @@ public class DefaultFileHandlerTest {
 
         filter.addRule(CUSTOMER_UPN_KEY, unpRule, List.of(CUSTOMER_NAME_KEY, CUSTOMER_UPN_KEY));
 
-        List<Map<String, String>> result = fileHandler.extractAllDataByFieldValues(FileType.TXT, new byte[]{}, filter);
+        List<Map<String, String>> result = fileHandler.extractDataByFieldValues(FileType.TXT, new byte[]{}, filter);
 
         assertEquals(1, result.size());
         assertEquals(INDIVIDUALS_1, result.get(0).get(CUSTOMER_NAME_KEY));
@@ -111,7 +111,7 @@ public class DefaultFileHandlerTest {
 
         filter.addRule(CUSTOMER_NAME_KEY, nameRule, List.of(CUSTOMER_NAME_KEY, CUSTOMER_UPN_KEY));
 
-        List<Map<String, String>> result = fileHandler.extractAllDataByFieldValues(FileType.TXT, new byte[]{}, filter);
+        List<Map<String, String>> result = fileHandler.extractDataByFieldValues(FileType.TXT, new byte[]{}, filter);
 
         assertEquals(2, result.size());
         assertEquals(INDIVIDUALS_1, result.get(0).get(CUSTOMER_NAME_KEY));
@@ -132,5 +132,48 @@ public class DefaultFileHandlerTest {
         Map<String, String[]> result = fileHandler.getDataArraysByColumns(FileType.XLSX, new byte[]{}, filter);
 
         Assertions.assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void shouldExtractDataWithNameContainingIvanAndNonEmptyUpn() throws IOException {
+        List<Map<String, String>> mockData = List.of(
+                Map.of(CUSTOMER_NAME_KEY, INDIVIDUALS_1, CUSTOMER_UPN_KEY, UNP_1),
+                Map.of(CUSTOMER_NAME_KEY, INDIVIDUALS_2, CUSTOMER_UPN_KEY, UNP_2),
+                Map.of(CUSTOMER_NAME_KEY, INDIVIDUALS_3, CUSTOMER_UPN_KEY, EMPTY_VALUE),
+                Map.of(CUSTOMER_NAME_KEY, INDIVIDUALS_4, CUSTOMER_UPN_KEY, UNP_3),
+                Map.of(CUSTOMER_NAME_KEY, INDIVIDUALS_5, CUSTOMER_UPN_KEY, EMPTY_VALUE)
+        );
+
+        mockDataReader(FileType.TXT, mockData);
+
+        DataFilter filter = new DataFilter();
+
+        PredicateRule nameContainsIvanRule = new PredicateRule(
+                Set.of(CUSTOMER_NAME_KEY),
+                value -> value != null && value.contains(INDIVIDUALS_NAME)
+        );
+
+        PredicateRule nonEmptyUpnRule = new PredicateRule(
+                Set.of(CUSTOMER_UPN_KEY),
+                value -> value != null && !value.trim().isEmpty()
+        );
+
+        filter.addRule(UPN_NOT_NULL_AND_NAME_LIKE_IVAN_KEY, nameContainsIvanRule, List.of(CUSTOMER_NAME_KEY, CUSTOMER_UPN_KEY));
+        filter.addRule(UPN_NOT_NULL_AND_NAME_LIKE_IVAN_KEY, nonEmptyUpnRule, List.of(CUSTOMER_NAME_KEY, CUSTOMER_UPN_KEY));
+
+        List<Map<String, String>> result = fileHandler.extractDataByFieldValues(FileType.TXT, new byte[]{}, filter);
+
+        assertEquals(3, result.size());
+
+        List<String> expectedNames = List.of(INDIVIDUALS_1, INDIVIDUALS_2, INDIVIDUALS_4);
+        List<String> expectedUpns = List.of(UNP_1, UNP_2, UNP_3);
+
+        for (int i = 0; i < result.size(); i++) {
+            Map<String, String> record = result.get(i);
+            assertFalse(record.isEmpty());
+            assertFalse(record.containsKey(IGNORED_FIELD_KEY));
+            assertEquals(expectedNames.get(i), record.get(CUSTOMER_NAME_KEY));
+            assertEquals(expectedUpns.get(i), record.get(CUSTOMER_UPN_KEY));
+        }
     }
 }

@@ -11,7 +11,7 @@ public interface FileHandler {
 
     Set<String> extractDataByFieldName(FileType fileType, byte[] bytes, String fieldName, Integer sheetNumber);
 
-    List<Map<String, String>> extractAllDataByFieldValues(FileType fileType, byte[] bytes, DataFilter filter);
+    List<Map<String, String>> extractDataByFieldValues(FileType fileType, byte[] bytes, DataFilter filter);
 
     Map<String, String[]> getDataArraysByColumns(FileType fileType, byte[] bytes, DataFilter filter);
 

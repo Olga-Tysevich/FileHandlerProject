@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * Demo application!
  */
-public class FileProcessor {
+public class FileHandlerDemo {
     private static final String DOMAIN_PATH_CVS = "src/main/resources/cvs/domains.csv";
     private static final String RES_PATH_CVS = "src/main/resources/cvs/res.csv";
     private static final String UNP_PATH_CVS = "src/main/resources/cvs/УНП.csv";
@@ -37,7 +37,7 @@ public class FileProcessor {
         System.out.println("RES_PATH: " + resPath);
 
         int sheetNumber = RES_PATH_XLSX.equals(resPath) ? 1 : 0;
-        List<Map<String, String>> extractedData = fileHandler.extractAllDataByFieldValues(fileType, readResData,
+        List<Map<String, String>> extractedData = fileHandler.extractDataByFieldValues(fileType, readResData,
                 toReadAllData(fileType, fileHandler, unpPath, sheetNumber));
 
         Map<String, String[]> dataArrays = fileHandler.getDataArraysByColumns(fileType, readDomainData, toSeparateData());

@@ -9,6 +9,7 @@ public interface Constants {
     String CUSTOMER_NAME_KEY = "Имя клиента";
     String CUSTOMER_UPN_KEY = "УНП клиента";
     String IGNORED_FIELD_KEY = "Игнорируемое поле";
+    String UPN_NOT_NULL_AND_NAME_LIKE_IVAN_KEY = "Result_key";
 
     String EMPTY_VALUE = "";
 
@@ -19,6 +20,8 @@ public interface Constants {
     String INDIVIDUALS_1 = "Иванов Иван Иванович";
     String INDIVIDUALS_2 = "Петров Иван Петрович";
     String INDIVIDUALS_3 = "Петров Петр Петрович";
+    String INDIVIDUALS_4 = "Иванова Мария Ивановна";
+    String INDIVIDUALS_5 = "Сидоров Иван Петрович";
     String COMPANY_1 = "ООО Ромашка";
 
     String INDIVIDUALS_NAME = "Иван";

@@ -25,9 +25,14 @@ public class DataFilter {
         Set<String> resultFields = new HashSet<>();
 
         for (Map.Entry<String, List<Rule>> entry : rules.entrySet()) {
+            boolean validRow = true;
             for (Rule rule : entry.getValue()) {
-                if (rule.test(fields))
-                    resultFields.add(entry.getKey());
+                if (!rule.test(fields))
+                    validRow = false;
+            }
+
+            if (validRow) {
+                resultFields.add(entry.getKey());
             }
         }
 

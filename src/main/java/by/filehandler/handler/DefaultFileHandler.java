@@ -27,7 +27,7 @@ public class DefaultFileHandler implements FileHandler {
     }
 
     @Override
-    public List<Map<String, String>> extractAllDataByFieldValues(FileType fileType, byte[] bytes, DataFilter filter) {
+    public List<Map<String, String>> extractDataByFieldValues(FileType fileType, byte[] bytes, DataFilter filter) {
         FileDataReader dataReader = dataReader(fileType, filter.getSheetNumber());
         try {
             List<Map<String, String>> data = dataReader.readData(bytes);
